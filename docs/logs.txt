@@ -1,0 +1,293 @@
+❯ docker compose up --build -d
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Building 3.9s (16/16) FINISHED                                                
+ => [internal] load local bake definitions                                   0.0s
+ => => reading from stdin 415B                                               0.0s
+ => [internal] load build definition from Dockerfile                         0.0s
+ => => transferring dockerfile: 1.17kB                                       0.0s
+ => [internal] load metadata for docker.io/library/python:3.12-slim          3.1s
+ => [auth] library/python:pull token for registry-1.docker.io                0.0s
+ => [internal] load .dockerignore                                            0.0s
+ => => transferring context: 2B                                              0.0s
+ => [1/8] FROM docker.io/library/python:3.12-slim@sha256:d67a7b66b989ad6b6d  0.0s
+ => [internal] load build context                                            0.0s
+ => => transferring context: 33.08kB                                         0.0s
+ => CACHED [2/8] WORKDIR /app                                                0.0s
+ => CACHED [3/8] RUN apt-get update     && apt-get install -y --no-install-  0.0s
+ => CACHED [4/8] COPY requirements.txt .                                     0.0s
+ => CACHED [5/8] RUN pip install --no-cache-dir --upgrade pip     && pip in  0.0s
+ => CACHED [6/8] RUN mkdir -p /app/logs /app/models /app/scripts             0.0s
+ => [7/8] COPY . .                                                           0.0s
+ => [8/8] RUN adduser --disabled-password --gecos '' appuser     && chown -  0.4s
+ => exporting to image                                                       0.0s
+ => => exporting layers                                                      0.0s
+ => => writing image sha256:074a79d140a0190daca4a0b943f0ed4abe4f6e8a8986f2e  0.0s
+ => => naming to docker.io/library/cicd_fixer_agent-app                      0.0s
+ => resolving provenance for metadata file                                   0.0s
+[+] Running 5/5
+ ✔ app                                 Built                                 0.0s 
+ ✔ Network cicd_fixer_agent_default    Created                               0.0s 
+ ✔ Container cicd_fixer_agent-redis-1  Started                               0.3s 
+ ✔ Container cicd_fixer_agent-db-1     Healthy                               5.8s 
+ ✔ Container cicd_fixer_agent-app-1    Started                               5.9s 
+❯ sleep 15 && docker compose ps
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+NAME                       IMAGE                  COMMAND                  SERVICE   CREATED          STATUS                           PORTS
+cicd_fixer_agent-app-1     cicd_fixer_agent-app   "uvicorn cicd_fixer.…"   app       26 seconds ago   Up 1 second (health: starting)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+cicd_fixer_agent-db-1      postgres:15            "docker-entrypoint.s…"   db        26 seconds ago   Up 26 seconds (healthy)          0.0.0.0:5433->5432/tcp, [::]:5433->5432/tcp
+cicd_fixer_agent-redis-1   redis:7-alpine         "docker-entrypoint.s…"   redis     26 seconds ago   Up 26 seconds (healthy)          0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp
+❯ docker compose logs app --tail=20
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+app-1  |   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+app-1  |   File "<frozen importlib._bootstrap_external>", line 999, in exec_module
+app-1  |   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+app-1  |   File "/app/src/cicd_fixer/main.py", line 11, in <module>
+app-1  |     from .api.routes import health, analysis, webhook, portia
+app-1  |   File "/app/src/cicd_fixer/api/routes/portia.py", line 7, in <module>
+app-1  |     from ...services.portia_agent import portia_agent
+app-1  |   File "/app/src/cicd_fixer/services/portia_agent.py", line 441, in <module>
+app-1  |     portia_agent = CICDFixerPortiaAgent()
+app-1  |                    ^^^^^^^^^^^^^^^^^^^^^^
+app-1  |   File "/app/src/cicd_fixer/services/portia_agent.py", line 47, in __init__
+app-1  |     self.tool_registry = create_ci_cd_tool_registry()
+app-1  |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app-1  |   File "/app/src/cicd_fixer/tools/registry.py", line 20, in create_ci_cd_tool_registry
+app-1  |     analyze_workflow_failure_tool(),
+app-1  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app-1  |   File "/app/src/cicd_fixer/tools/registry.py", line 134, in analyze_workflow_failure_tool
+app-1  |     return Tool(
+app-1  |            ^^^^^
+app-1  | TypeError: Can't instantiate abstract class Tool without an implementation for abstract method 'run'
+❯ docker compose down
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Running 4/4
+ ✔ Container cicd_fixer_agent-app-1    Removed                               0.0s 
+ ✔ Container cicd_fixer_agent-db-1     Removed                               0.3s 
+ ✔ Container cicd_fixer_agent-redis-1  Removed                               0.2s 
+ ✔ Network cicd_fixer_agent_default    Removed                               0.2s 
+❯ docker compose up --build -d
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Building 2.0s (15/15) FINISHED                                                
+ => [internal] load local bake definitions                                   0.0s
+ => => reading from stdin 415B                                               0.0s
+ => [internal] load build definition from Dockerfile                         0.0s
+ => => transferring dockerfile: 1.17kB                                       0.0s
+ => [internal] load metadata for docker.io/library/python:3.12-slim          1.3s
+ => [internal] load .dockerignore                                            0.0s
+ => => transferring context: 2B                                              0.0s
+ => [1/8] FROM docker.io/library/python:3.12-slim@sha256:d67a7b66b989ad6b6d  0.0s
+ => [internal] load build context                                            0.0s
+ => => transferring context: 40.86kB                                         0.0s
+ => CACHED [2/8] WORKDIR /app                                                0.0s
+ => CACHED [3/8] RUN apt-get update     && apt-get install -y --no-install-  0.0s
+ => CACHED [4/8] COPY requirements.txt .                                     0.0s
+ => CACHED [5/8] RUN pip install --no-cache-dir --upgrade pip     && pip in  0.0s
+ => CACHED [6/8] RUN mkdir -p /app/logs /app/models /app/scripts             0.0s
+ => [7/8] COPY . .                                                           0.0s
+ => [8/8] RUN adduser --disabled-password --gecos '' appuser     && chown -  0.3s
+ => exporting to image                                                       0.0s
+ => => exporting layers                                                      0.0s
+ => => writing image sha256:6eb99f990556888038ef68cce0efb8e96ce50871ba993d2  0.0s
+ => => naming to docker.io/library/cicd_fixer_agent-app                      0.0s
+ => resolving provenance for metadata file                                   0.0s
+[+] Running 5/5
+ ✔ app                                 Built                                 0.0s 
+ ✔ Network cicd_fixer_agent_default    Created                               0.0s 
+ ✔ Container cicd_fixer_agent-redis-1  Started                               0.2s 
+ ✔ Container cicd_fixer_agent-db-1     Healthy                               5.8s 
+ ✔ Container cicd_fixer_agent-app-1    Started                               5.9s 
+❯ sleep 20 && docker compose ps
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+NAME                       IMAGE                  COMMAND                  SERVICE   CREATED          STATUS                                  PORTS
+cicd_fixer_agent-app-1     cicd_fixer_agent-app   "uvicorn cicd_fixer.…"   app       32 seconds ago   Restarting (1) Less than a second ago   
+cicd_fixer_agent-db-1      postgres:15            "docker-entrypoint.s…"   db        32 seconds ago   Up 32 seconds (healthy)                 0.0.0.0:5433->5432/tcp, [::]:5433->5432/tcp
+cicd_fixer_agent-redis-1   redis:7-alpine         "docker-entrypoint.s…"   redis     32 seconds ago   Up 32 seconds (healthy)                 0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp
+❯ docker compose logs app --tail=15
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+app-1  |   File "/app/src/cicd_fixer/api/routes/portia.py", line 7, in <module>
+app-1  |     from ...services.portia_agent import portia_agent
+app-1  |   File "/app/src/cicd_fixer/services/portia_agent.py", line 441, in <module>
+app-1  |     portia_agent = CICDFixerPortiaAgent()
+app-1  |                    ^^^^^^^^^^^^^^^^^^^^^^
+app-1  |   File "/app/src/cicd_fixer/services/portia_agent.py", line 47, in __init__
+app-1  |     self.tool_registry = create_ci_cd_tool_registry()
+app-1  |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app-1  |   File "/app/src/cicd_fixer/tools/registry.py", line 20, in create_ci_cd_tool_registry
+app-1  |     analyze_workflow_failure_tool(),
+app-1  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app-1  |   File "/app/src/cicd_fixer/tools/registry.py", line 134, in analyze_workflow_failure_tool
+app-1  |     tool = Tool(
+app-1  |            ^^^^^
+app-1  | TypeError: Can't instantiate abstract class Tool without an implementation for abstract method 'run'
+❯ docker compose down
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Running 4/4
+ ✔ Container cicd_fixer_agent-app-1    Removed                               0.0s 
+ ✔ Container cicd_fixer_agent-db-1     Removed                               0.2s 
+ ✔ Container cicd_fixer_agent-redis-1  Removed                               0.3s 
+ ✔ Network cicd_fixer_agent_default    Removed                               0.2s 
+❯ docker compose up --build -d
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Building 3.5s (16/16) FINISHED                                                
+ => [internal] load local bake definitions                                   0.0s
+ => => reading from stdin 415B                                               0.0s
+ => [internal] load build definition from Dockerfile                         0.0s
+ => => transferring dockerfile: 1.17kB                                       0.0s
+ => [internal] load metadata for docker.io/library/python:3.12-slim          2.7s
+ => [auth] library/python:pull token for registry-1.docker.io                0.0s
+ => [internal] load .dockerignore                                            0.0s
+ => => transferring context: 2B                                              0.0s
+ => [1/8] FROM docker.io/library/python:3.12-slim@sha256:d67a7b66b989ad6b6d  0.0s
+ => [internal] load build context                                            0.0s
+ => => transferring context: 46.56kB                                         0.0s
+ => CACHED [2/8] WORKDIR /app                                                0.0s
+ => CACHED [3/8] RUN apt-get update     && apt-get install -y --no-install-  0.0s
+ => CACHED [4/8] COPY requirements.txt .                                     0.0s
+ => CACHED [5/8] RUN pip install --no-cache-dir --upgrade pip     && pip in  0.0s
+ => CACHED [6/8] RUN mkdir -p /app/logs /app/models /app/scripts             0.0s
+ => [7/8] COPY . .                                                           0.0s
+ => [8/8] RUN adduser --disabled-password --gecos '' appuser     && chown -  0.4s
+ => exporting to image                                                       0.0s
+ => => exporting layers                                                      0.0s
+ => => writing image sha256:bbe841c0a93965432eff42eff90507e18f0f216a57b8a75  0.0s
+ => => naming to docker.io/library/cicd_fixer_agent-app                      0.0s
+ => resolving provenance for metadata file                                   0.0s
+[+] Running 5/5
+ ✔ app                                 Built                                 0.0s 
+ ✔ Network cicd_fixer_agent_default    Created                               0.0s 
+ ✔ Container cicd_fixer_agent-redis-1  Started                               0.3s 
+ ✔ Container cicd_fixer_agent-db-1     Healthy                               5.8s 
+ ✔ Container cicd_fixer_agent-app-1    Started                               5.9s 
+❯ sleep 20 && docker compose ps
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+NAME                       IMAGE                  COMMAND                  SERVICE   CREATED          STATUS                            PORTS
+cicd_fixer_agent-app-1     cicd_fixer_agent-app   "uvicorn cicd_fixer.…"   app       32 seconds ago   Up 4 seconds (health: starting)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+cicd_fixer_agent-db-1      postgres:15            "docker-entrypoint.s…"   db        32 seconds ago   Up 31 seconds (healthy)           0.0.0.0:5433->5432/tcp, [::]:5433->5432/tcp
+cicd_fixer_agent-redis-1   redis:7-alpine         "docker-entrypoint.s…"   redis     32 seconds ago   Up 31 seconds (healthy)           0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp
+❯ sleep 10 && docker compose ps
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+NAME                       IMAGE                  COMMAND                  SERVICE   CREATED          STATUS                                     PORTS
+cicd_fixer_agent-app-1     cicd_fixer_agent-app   "uvicorn cicd_fixer.…"   app       53 seconds ago   Up Less than a second (health: starting)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+cicd_fixer_agent-db-1      postgres:15            "docker-entrypoint.s…"   db        53 seconds ago   Up 52 seconds (healthy)                    0.0.0.0:5433->5432/tcp, [::]:5433->5432/tcp
+cicd_fixer_agent-redis-1   redis:7-alpine         "docker-entrypoint.s…"   redis     53 seconds ago   Up 52 seconds (healthy)                    0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp
+❯ docker compose logs app --tail=10
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+app-1  |     For further information visit https://errors.pydantic.dev/2.11/v/missing
+app-1  | output_schema
+app-1  |   Field required [type=missing, input_value={'name': 'analyze_workflo... failed workflow run'}}}, input_type=dict]
+app-1  |     For further information visit https://errors.pydantic.dev/2.11/v/missing
+app-1  | function
+app-1  |   Extra inputs are not permitted [type=extra_forbidden, input_value=<function analyze_workflo...ilure at 0xffff6428fba0>, input_type=function]
+app-1  |     For further information visit https://errors.pydantic.dev/2.11/v/extra_forbidden
+app-1  | parameters
+app-1  |   Extra inputs are not permitted [type=extra_forbidden, input_value={'workflow_data': {'type'...e failed workflow run'}}, input_type=dict]
+app-1  |     For further information visit https://errors.pydantic.dev/2.11/v/extra_forbidden
+❯ docker compose down
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Running 4/4
+ ✔ Container cicd_fixer_agent-app-1    Removed                               0.0s 
+ ✔ Container cicd_fixer_agent-db-1     Removed                               0.2s 
+ ✔ Container cicd_fixer_agent-redis-1  Removed                               0.3s 
+ ✔ Network cicd_fixer_agent_default    Removed                               0.2s 
+❯ docker compose up --build -d
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Building 2.2s (15/15) FINISHED                                                
+ => [internal] load local bake definitions                                   0.0s
+ => => reading from stdin 415B                                               0.0s
+ => [internal] load build definition from Dockerfile                         0.0s
+ => => transferring dockerfile: 1.17kB                                       0.0s
+ => [internal] load metadata for docker.io/library/python:3.12-slim          1.5s
+ => [internal] load .dockerignore                                            0.0s
+ => => transferring context: 2B                                              0.0s
+ => [1/8] FROM docker.io/library/python:3.12-slim@sha256:d67a7b66b989ad6b6d  0.0s
+ => [internal] load build context                                            0.0s
+ => => transferring context: 35.02kB                                         0.0s
+ => CACHED [2/8] WORKDIR /app                                                0.0s
+ => CACHED [3/8] RUN apt-get update     && apt-get install -y --no-install-  0.0s
+ => CACHED [4/8] COPY requirements.txt .                                     0.0s
+ => CACHED [5/8] RUN pip install --no-cache-dir --upgrade pip     && pip in  0.0s
+ => CACHED [6/8] RUN mkdir -p /app/logs /app/models /app/scripts             0.0s
+ => [7/8] COPY . .                                                           0.1s
+ => [8/8] RUN adduser --disabled-password --gecos '' appuser     && chown -  0.3s
+ => exporting to image                                                       0.0s
+ => => exporting layers                                                      0.0s
+ => => writing image sha256:1c54ce775a8f18882264cd93028d13900aa39c8931ef010  0.0s
+ => => naming to docker.io/library/cicd_fixer_agent-app                      0.0s
+ => resolving provenance for metadata file                                   0.0s
+[+] Running 5/5
+ ✔ app                                 Built                                 0.0s 
+ ✔ Network cicd_fixer_agent_default    Created                               0.0s 
+ ✔ Container cicd_fixer_agent-db-1     Healthy                               5.7s 
+ ✔ Container cicd_fixer_agent-redis-1  Started                               0.2s 
+ ✔ Container cicd_fixer_agent-app-1    Started                               5.8s 
+❯ sleep 15 && docker compose ps
+WARN[0000] /Users/shreyasgandhi/AI_Agent_Hackathon/cicd_fixer_agent/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+NAME                       IMAGE                  COMMAND                  SERVICE   CREATED          STATUS                    PORTS
+cicd_fixer_agent-app-1     cicd_fixer_agent-app   "uvicorn cicd_fixer.…"   app       27 seconds ago   Up 21 seconds (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+cicd_fixer_agent-db-1      postgres:15            "docker-entrypoint.s…"   db        27 seconds ago   Up 26 seconds (healthy)   0.0.0.0:5433->5432/tcp, [::]:5433->5432/tcp
+cicd_fixer_agent-redis-1   redis:7-alpine         "docker-entrypoint.s…"   redis     27 seconds ago   Up 26 seconds (healthy)   0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp
+❯ curl -s http://localhost:8000/ | jq .
+{
+  "message": "CI/CD Fixer Agent API",
+  "version": "1.0.0",
+  "status": "running",
+  "docs": "/docs",
+  "health": "/api/v1/health"
+}
+❯ curl -s http://localhost:8000/api/v1/health | jq .
+❯ curl -s http://localhost:8000/api/v1/health
+❯ curl -s http://localhost:8000/docs
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>CI/CD Fixer Agent - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/openapi.json',
+    "dom_id": "#swagger-ui",
+"layout": "BaseLayout",
+"deepLinking": true,
+"showExtensions": true,
+"showCommonExtensions": true,
+oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+    presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+    })
+    </script>
+    </body>
+    </html>
+    %                                                                             
+❯ curl -s http://localhost:8000/openapi.json | jq '.paths | keys'
+[
+  "/",
+  "/api/v1/analysis/generate-fix",
+  "/api/v1/analysis/ml-prediction",
+  "/api/v1/analysis/workflow",
+  "/api/v1/health/",
+  "/api/v1/health/live",
+  "/api/v1/health/ready",
+  "/api/v1/webhook/github",
+  "/health"
+]
+❯ curl -s http://localhost:8000/api/v1/health/ | jq .
+{
+  "status": "degraded",
+  "timestamp": "2025-08-23T20:46:23.943493Z",
+  "services": {
+    "database": "unhealthy",
+    "github": "healthy",
+    "gemini_ai": "healthy",
+    "portia_agent": "unhealthy"
+  }
+}
