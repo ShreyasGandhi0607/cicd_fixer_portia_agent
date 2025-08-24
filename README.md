@@ -2,26 +2,32 @@
 
 An AI-powered CI/CD failure analysis and fix generation system that automatically analyzes GitHub Actions workflow failures and provides intelligent fix suggestions using machine learning and AI.
 
+**Deployed API:** [https://cicd-fixer-portia-agent.onrender.com](https://cicd-fixer-portia-agent.onrender.com)  
+**API Docs:** [https://cicd-fixer-portia-agent.onrender.com/docs](https://cicd-fixer-portia-agent.onrender.com/docs)
+
+---
+
 ## 🚀 Features
 
-- **Portia AI Framework**: Built on Portia's structured AI agent framework for intelligent CI/CD analysis
-- **AI-Powered Analysis**: Uses Google Gemini AI to analyze CI/CD failure logs
+- **Portia AI Framework**: Structured AI agent framework for CI/CD analysis
+- **AI-Powered Analysis**: Uses Gemini AI to analyze CI/CD failure logs
 - **Machine Learning**: ML-based success prediction for fix suggestions
 - **Pattern Recognition**: Identifies common failure patterns across repositories
-- **Intelligent Fix Generation**: Generates context-aware fix suggestions using Portia's plan execution
+- **Intelligent Fix Generation**: Context-aware fixes with confidence scoring
 - **GitHub Integration**: Webhook-based automatic failure detection
-- **Analytics Dashboard**: Comprehensive failure pattern analysis
-- **Multi-Language Support**: Works with JavaScript, Python, Java, C#, and more
-- **RESTful API**: Clean, documented API for integration
-- **Portia Tools**: 8 specialized tools for CI/CD operations including error classification, fix generation, and GitHub integration
+- **Analytics Dashboard**: Failure statistics & insights
+- **Multi-Language Support**: Works with JS, Python, Java, C#, etc.
+- **RESTful API**: Well-structured API endpoints
+- **Portia Tools**: Specialized tools for CI/CD operations
+
+---
 
 ## 🏗️ Architecture
 
-The project follows a clean, modular architecture:
-
 ```
-cicd_fixer_agent/
-├── src/cicd_fixer/           # Main application code
+
+cicd\_fixer\_agent/
+├── src/cicd\_fixer/           # Main application code
 │   ├── api/                  # API layer (FastAPI routes)
 │   ├── core/                 # Core configuration and utilities
 │   ├── database/             # Database models and repositories
@@ -29,30 +35,37 @@ cicd_fixer_agent/
 │   ├── analytics/            # ML and pattern analysis
 │   ├── models/               # Pydantic data models
 │   └── tools/                # Portia AI framework tools
-├── tests/                    # Comprehensive test suite
+├── tests/                    # Test suite
 ├── docs/                     # Documentation
 ├── scripts/                  # Utility scripts
-└── deployment/               # Docker and Kubernetes configs
-```
+└── deployment/               # Docker & Kubernetes configs
+
+````
+
+---
 
 ## 🛠️ Technology Stack
 
 - **Backend**: FastAPI (Python 3.11+)
-- **Database**: PostgreSQL with SQLAlchemy ORM
-- **AI/ML**: **Google Gemini 2.5 Flash** (fast, cost-effective), scikit-learn
-- **AI Framework**: **Portia AI Framework** - Core AI agent orchestration
-- **Containerization**: Docker & Docker Compose with health checks
-- **API Documentation**: OpenAPI/Swagger
-- **Testing**: pytest with async support
-- **Code Quality**: Black, flake8, mypy
+- **Database**: PostgreSQL
+- **AI/ML**: Google Gemini 2.5 Flash, scikit-learn
+- **AI Framework**: Portia AI Framework
+- **Containerization**: Docker & Docker Compose
+- **API Docs**: OpenAPI/Swagger
+- **Testing**: pytest
+
+---
 
 ## 📋 Prerequisites
 
-- Python 3.11 or higher
+- Python 3.11+
 - PostgreSQL 15+
-- Docker and Docker Compose
+- Docker & Docker Compose
 - GitHub Personal Access Token
 - Google AI API Key
+- Portia API Key
+
+---
 
 ## 🚀 Quick Start
 
@@ -61,217 +74,161 @@ cicd_fixer_agent/
 ```bash
 git clone <repository-url>
 cd cicd_fixer_agent
-
-# Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
+source venv/bin/activate  # (Windows: venv\Scripts\activate)
 pip install -r requirements.txt
-```
+````
 
-### 2. Environment Configuration
+### 2. Configure Environment
 
 ```bash
-# Copy environment template
 cp .env.example .env
-
-# Edit .env with your configuration
-DATABASE_URL=postgresql://username:password@localhost:5432/cicd_fixer_db
-GITHUB_TOKEN=your_github_personal_access_token
-GOOGLE_API_KEY=your_google_ai_api_key
-GITHUB_WEBHOOK_SECRET=your_webhook_secret
-SECRET_KEY=your_secret_key_here
 ```
 
-### 3. Database Setup
+Update `.env`:
 
-```bash
-# Run database setup script
-python scripts/setup_db.py
+```
+GOOGLE_API_KEY= # your_google_ai_api_key
+DATABASE_URL=postgres://postgres:postgres@localhost:5432/mydb
+GITHUB_TOKEN=  # Your GitHub token for API access
+GITHUB_WEBHOOK_SECRET= # Your GitHub webhook secret for secure communication
+PORTIA_API_KEY=     # Your Portia API key
 ```
 
-### 4. Start the Application
+### 3. Run Application
 
 ```bash
-# Using Docker (recommended)
-./docker-start.sh
-
-# Or manually with Docker Compose
+# Docker
 docker-compose up --build -d
 
-# Or manually without Docker
-./start.sh
-
-# Or manually with uvicorn
+# Or manual
 uvicorn cicd_fixer.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### 5. Access the Application
+### 4. Access
 
-- **API**: http://localhost:8000
-- **Documentation**: http://localhost:8000/docs
-- **Health Check**: http://localhost:8000/health
-- **Portia Test**: http://localhost:8000/api/v1/portia/test
-- **Portia Tools**: http://localhost:8000/api/v1/portia/tools
+* **Base API**: [https://cicd-fixer-portia-agent.onrender.com](https://cicd-fixer-portia-agent.onrender.com)
+* **Docs**: [https://cicd-fixer-portia-agent.onrender.com/docs](https://cicd-fixer-portia-agent.onrender.com/docs)
+* **Health**: [https://cicd-fixer-portia-agent.onrender.com/api/v1/health/](https://cicd-fixer-portia-agent.onrender.com/api/v1/health/)
 
-## 🔧 Configuration
+---
 
-### Environment Variables
+## 📚 Core API Endpoints
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `DATABASE_URL` | PostgreSQL connection string | - |
-| `GITHUB_TOKEN` | GitHub Personal Access Token | - |
-| `GOOGLE_API_KEY` | Google AI API Key | - |
-| `GITHUB_WEBHOOK_SECRET` | GitHub webhook secret | - |
-| `SECRET_KEY` | Application secret key | - |
-| `HOST` | Server host | `0.0.0.0` |
-| `PORT` | Server port | `8000` |
-| `DEBUG` | Debug mode | `false` |
-| `LOG_LEVEL` | Logging level | `INFO` |
+### 🔹 Health
 
-### GitHub Webhook Setup
+* `GET /api/v1/health/` → Health check
+* `GET /api/v1/health/ready` → Readiness check
+* `GET /api/v1/health/live` → Liveness check
 
-1. Go to your GitHub repository
-2. Navigate to Settings → Webhooks
-3. Add webhook with URL: `https://your-domain.com/api/v1/webhook/github`
-4. Set content type to `application/json`
-5. Select events: `Workflow runs`
-6. Set webhook secret (same as `GITHUB_WEBHOOK_SECRET`)
+### 🔹 Workflow Analysis
 
-## 📚 API Endpoints
+* `POST /api/v1/analysis/workflow` → Analyze a workflow failure
+* `POST /api/v1/analysis/ml-prediction` → Predict fix success
+* `POST /api/v1/analysis/generate-fix` → Generate fix suggestion
 
-### Core Endpoints
+### 🔹 Portia (Plan-based Analysis)
 
-- `GET /` - Application information
-- `GET /health` - Health check
-- `GET /docs` - API documentation
+* `POST /api/v1/portia/analyze` → Start analysis
+* `GET /api/v1/portia/plans/{plan_run_id}/status` → Poll analysis status
+* `GET /api/v1/portia/plans/{plan_run_id}/clarifications` → Get clarifications
+* `POST /api/v1/portia/clarifications/{plan_run_id}/{clarification_id}` → Respond to clarification
+* `POST /api/v1/portia/fixes/{fix_id}/approve` → Approve fix & create PR
+* `POST /api/v1/portia/fixes/{fix_id}/reject` → Reject fix
 
-### Analysis Endpoints
+### 🔹 Fixes
 
-- `POST /api/v1/analysis/workflow` - Analyze workflow failure
-- `POST /api/v1/analysis/ml-prediction` - ML-based success prediction
-- `POST /api/v1/analysis/generate-fix` - Generate intelligent fix
+* `GET /api/v1/fixes/?owner={owner}&repo={repo}` → Get fixes for repo
+* `GET /api/v1/fixes/{fix_id}` → Fix details
+* `POST /api/v1/fixes/{fix_id}/approve` → Approve fix
+* `POST /api/v1/fixes/{fix_id}/reject` → Reject fix
+* `GET /api/v1/fixes/history/{owner}/{repo}` → Fix history
 
-### Webhook Endpoints
+### 🔹 Failures
 
-- `POST /api/v1/webhook/github` - GitHub webhook handler
+* `GET /api/v1/failures/` → All failures
+* `GET /api/v1/failures/{failure_id}` → Failure detail
+* `GET /api/v1/failures/repository/{owner}/{repo}?days=30` → Failures for repo
+* `GET /api/v1/failures/statistics/summary` → Failure stats
 
-### Health Endpoints
+### 🔹 Analytics
 
-- `GET /api/v1/health/` - Comprehensive health check
-- `GET /api/v1/health/ready` - Readiness probe
-- `GET /api/v1/health/live` - Liveness probe
+* `GET /api/v1/analytics/patterns` → Failure patterns
+* `GET /api/v1/analytics/effectiveness` → Fix effectiveness
+* `GET /api/v1/analytics/repository/{owner}/{repo}` → Repo analytics
+* `GET /api/v1/analytics/dashboard` → Dashboard
+* `POST /api/v1/analytics/ml/similar-fixes` → Similar fixes
+* `POST /api/v1/analytics/ml/predict-success` → Predict fix success
+* `POST /api/v1/analytics/ml/generate-enhanced-fix` → Generate enhanced fix
+* `POST /api/v1/analytics/ml/learn-from-feedback` → Learn from feedback
+* `GET /api/v1/analytics/ml/pattern-insights` → ML insights
+* `GET /api/v1/analytics/ml/model-performance` → ML performance
+* `POST /api/v1/analytics/ml/fix-suggestions` → Generate fix suggestions
+
+### 🔹 Webhook
+
+* `POST /api/v1/webhook/github` → GitHub webhook
+
+---
+
+## ✅ Workflow Endpoints
+
+1. `GET /api/v1/failures/repository/{owner}/{repo}?days=30`
+2. `POST /api/v1/portia/analyze`
+3. `GET /api/v1/portia/plans/{plan_run_id}/status`
+4. `GET /api/v1/portia/plans/{plan_run_id}/clarifications`
+5. `GET /api/v1/fixes/?owner={owner}&repo={repo}`
+6. `POST /api/v1/portia/fixes/{fix_id}/approve`
+
+---
 
 ## 🧪 Testing
 
 ```bash
-# Test Portia integration
-python scripts/test_portia.py
-
-# Run demo
-python scripts/demo.py
-
-# Run all tests
 pytest
-
-# Run with coverage
 pytest --cov=cicd_fixer
-
-# Run specific test category
-pytest tests/test_api/
-pytest tests/test_services/
-pytest tests/test_analytics/
 ```
 
-## 🐳 Docker Deployment
+---
 
-### Development
+## 🐳 Docker Deployment
 
 ```bash
 docker-compose up --build
 ```
 
-### Production
+or
 
 ```bash
-# Build production image
-docker build -t cicd-fixer-agent:latest .
-
-# Run with environment variables
-docker run -d \
-  -p 8000:8000 \
+docker run -d -p 8000:8000 \
   -e DATABASE_URL=your_db_url \
   -e GITHUB_TOKEN=your_token \
   -e GOOGLE_API_KEY=your_key \
   cicd-fixer-agent:latest
 ```
 
-## 📊 Monitoring and Analytics
+---
 
-The system provides comprehensive analytics:
+## 📊 Monitoring & Analytics
 
-- **Failure Pattern Analysis**: Identifies common failure types
-- **Success Rate Tracking**: Monitors fix effectiveness
-- **ML Model Performance**: Tracks prediction accuracy
-- **Repository Learning**: Builds knowledge base per repository
-- **Performance Metrics**: Response times and throughput
+* Failure statistics
+* Fix effectiveness
+* Model performance
 
-## 🔒 Security Features
+---
 
-- GitHub webhook signature verification
-- Environment-based configuration
-- Secure database connections
-- Input validation and sanitization
-- Rate limiting (configurable)
-- CORS protection
+## 🔒 Security
 
-## 🤝 Contributing
+* Webhook signature verification
+* Input validation
+* Secure DB connections
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Ensure all tests pass
-6. Submit a pull request
-
-### Development Guidelines
-
-- Follow PEP 8 style guidelines
-- Use type hints throughout
-- Write comprehensive docstrings
-- Maintain test coverage above 80%
-- Use conventional commit messages
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+---
 
 ## 🆘 Support
 
-- **Documentation**: Check the `/docs` folder
-- **Issues**: Report bugs via GitHub Issues
-- **Discussions**: Use GitHub Discussions for questions
-- **Wiki**: Additional documentation and examples
-
-## 🔮 Roadmap
-
-- [ ] Real-time failure notifications
-- [ ] Advanced ML model training pipeline
-- [ ] Integration with more CI/CD platforms
-- [ ] Mobile application
-- [ ] Advanced analytics dashboard
-- [ ] Multi-tenant support
-- [ ] API rate limiting and quotas
-
-## 🙏 Acknowledgments
-
-- Google Gemini AI for intelligent analysis
-- Portia AI framework for ML capabilities
-- FastAPI for the excellent web framework
-- PostgreSQL for reliable data storage
-- The open-source community for inspiration
+* Docs: [API Docs](https://cicd-fixer-portia-agent.onrender.com/docs)
+* Issues: GitHub Issues
 
 ---
 
