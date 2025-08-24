@@ -2,6 +2,7 @@
 
 import hashlib
 from typing import Dict, Any
+from cicd_fixer.api.routes.analytics import generate_fix_suggestions
 from fastapi import APIRouter, HTTPException, Depends
 from ...models.requests import AnalysisRequest, MLPredictionRequest, MLFixGenerationRequest
 from ...models.responses import AnalysisResponse, MLPredictionResponse, FixResponse

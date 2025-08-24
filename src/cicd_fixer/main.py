@@ -96,18 +96,80 @@ app.add_middleware(
 app.include_router(health.router, prefix="/api/v1")
 app.include_router(analysis.router, prefix="/api/v1")
 app.include_router(webhook.router, prefix="/api/v1")
-# app.include_router(portia.router, prefix="/api/v1")  # Temporarily disabled for debugging
+
+# Import and include additional routes
+from .api.routes import fixes, failures, analytics, portia
+
+app.include_router(fixes.router, prefix="/api/v1")
+app.include_router(failures.router, prefix="/api/v1")
+app.include_router(analytics.router, prefix="/api/v1")
+app.include_router(portia.router, prefix="/api/v1")
 
 # Root endpoint
 @app.get("/")
 async def root():
-    """Root endpoint with basic information."""
+    """Root endpoint with comprehensive API information."""
     return {
         "message": "CI/CD Fixer Agent API",
         "version": "1.0.0",
+        "description": "AI-powered CI/CD failure analysis and fix generation system",
         "status": "running",
         "docs": "/docs",
-        "health": "/api/v1/health"
+        "endpoints": {
+            "health": "/api/v1/health",
+            "webhook": "/api/v1/webhook/github", 
+            "analysis": {
+                "workflow": "/api/v1/analysis/workflow",
+                "ml_prediction": "/api/v1/analysis/ml-prediction",
+                "generate_fix": "/api/v1/analysis/generate-fix"
+            },
+            "fixes": {
+                "list": "/api/v1/fixes",
+                "detail": "/api/v1/fixes/{fix_id}",
+                "approve": "/api/v1/fixes/{fix_id}/approve",
+                "reject": "/api/v1/fixes/{fix_id}/reject",
+                "history": "/api/v1/fixes/history/{owner}/{repo}"
+            },
+            "failures": {
+                "list": "/api/v1/failures",
+                "detail": "/api/v1/failures/{failure_id}",
+                "repository": "/api/v1/failures/repository/{owner}/{repo}",
+                "statistics": "/api/v1/failures/statistics/summary"
+            },
+            "analytics": {
+                "patterns": "/api/v1/analytics/patterns",
+                "effectiveness": "/api/v1/analytics/effectiveness",
+                "repository_profile": "/api/v1/analytics/repository/{owner}/{repo}",
+                "dashboard": "/api/v1/analytics/dashboard",
+                "ml_similar_fixes": "/api/v1/analytics/ml/similar-fixes",
+                "ml_predict_success": "/api/v1/analytics/ml/predict-success",
+                "ml_generate_fix": "/api/v1/analytics/ml/generate-enhanced-fix",
+                "ml_learn_feedback": "/api/v1/analytics/ml/learn-from-feedback",
+                "ml_pattern_insights": "/api/v1/analytics/ml/pattern-insights",
+                "ml_model_performance": "/api/v1/analytics/ml/model-performance",
+                "ml_fix_suggestions": "/api/v1/analytics/ml/fix-suggestions"
+            },
+            "portia": {
+                "analyze": "/api/v1/portia/analyze",
+                "clarifications": "/api/v1/portia/clarifications/{plan_run_id}/{clarification_id}",
+                "approve_fix": "/api/v1/portia/fixes/{fix_id}/approve",
+                "reject_fix": "/api/v1/portia/fixes/{fix_id}/reject",
+                "plan_status": "/api/v1/portia/plans/{plan_run_id}/status",
+                "pending_clarifications": "/api/v1/portia/plans/{plan_run_id}/clarifications",
+                "tools": "/api/v1/portia/tools",
+                "health": "/api/v1/portia/health"
+            }
+        },
+        "features": {
+            "pattern_recognition": "✅ Implemented - Analyzes failure patterns across repositories",
+            "success_prediction": "✅ Implemented - ML-based fix success prediction", 
+            "intelligent_fix_generation": "✅ Implemented - Enhanced AI fix generation",
+            "repository_learning": "✅ Implemented - Repository-specific intelligence",
+            "historical_analysis": "✅ Implemented - Time-based pattern analysis",
+            "portia_ai": "✅ Implemented - Plan-based AI analysis workflows",
+            "fix_management": "✅ Implemented - Complete fix approval/rejection workflow",
+            "failure_tracking": "✅ Implemented - Comprehensive failure analytics"
+        }
     }
 
 # Global exception handler

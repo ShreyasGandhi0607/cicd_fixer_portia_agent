@@ -34,7 +34,7 @@ class GeminiFixerAgent:
             self.client = None
             logger.warning("No Gemini API key provided. Using fallback analysis.")
     
-    def analyze_failure_and_suggest_fix(self, error_logs: str, repo_context: Dict[str, Any]) -> Dict[str, Any]:
+    async def analyze_failure_and_suggest_fix(self, error_logs: str, repo_context: Dict[str, Any]) -> Dict[str, Any]:
         """Analyze CI/CD failure logs and suggest a fix using Gemini AI.
         
         Args:
